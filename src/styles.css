@@ -5,140 +5,1053 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * SOFTWARE VALA — unified design system (Tailwind v4).
+ * All colors are HSL design tokens; never hardcode colors in components.
  */
 
+:root {
+    /* ========================================
+       SOFTWARE VALA — UNIFIED DASHBOARD SYSTEM
+       Reference: dashboard-migration (dark-first)
+       oklch → HSL approximations for Tailwind v3
+       ======================================== */
+
+    /* Core */
+    --background: 258 20% 12%;
+    --foreground: 258 5% 97%;
+
+    --surface: 258 15% 18%;
+    --surface-2: 258 12% 22%;
+
+    --card: 258 15% 18%;
+    --card-foreground: 258 5% 97%;
+
+    --popover: 258 15% 20%;
+    --popover-foreground: 258 5% 97%;
+
+    /* Brand — deep blue from logo */
+    --primary: 250 75% 58%;
+    --primary-foreground: 0 0% 99%;
+    --brand: 250 70% 52%;
+    --brand-foreground: 0 0% 99%;
+    --brand-red: 10 82% 55%;
+
+    --secondary: 258 12% 26%;
+    --secondary-foreground: 258 5% 97%;
+
+    --muted: 258 10% 24%;
+    --muted-foreground: 258 8% 68%;
+
+    --accent: 255 15% 28%;
+    --accent-foreground: 258 5% 97%;
+
+    --destructive: 10 82% 55%;
+    --destructive-foreground: 0 0% 99%;
+
+    --success: 152 45% 62%;
+    --warning: 45 70% 65%;
+
+    --border: 258 10% 22%;
+    --input: 258 10% 26%;
+    --ring: 250 75% 58%;
+
+    --radius: 0.875rem;
+
+    /* Unified Sidebar — deeper than background */
+    --sidebar-background: 258 22% 10%;
+    --sidebar-foreground: 258 8% 85%;
+    --sidebar-primary: 250 75% 58%;
+    --sidebar-primary-foreground: 0 0% 99%;
+    --sidebar-accent: 255 15% 22%;
+    --sidebar-accent-foreground: 258 5% 97%;
+    --sidebar-border: 258 12% 18%;
+    --sidebar-ring: 250 75% 58%;
+
+    /* Gradients */
+    --gradient-brand: linear-gradient(135deg, hsl(250 75% 58%), hsl(275 70% 55%));
+    --gradient-hero: linear-gradient(120deg, hsl(258 15% 22%) 0%, hsl(265 18% 20%) 50%, hsl(250 40% 30%) 100%);
+    --gradient-purple: linear-gradient(135deg, hsl(250 75% 58%), hsl(275 70% 55%));
+    --gradient-blue: linear-gradient(135deg, hsl(220 75% 55%), hsl(200 80% 60%));
+    --gradient-teal: linear-gradient(135deg, hsl(170 60% 45%), hsl(150 55% 50%));
+    --gradient-coral: linear-gradient(135deg, hsl(10 82% 60%), hsl(340 75% 60%));
+    --gradient-green: linear-gradient(135deg, hsl(150 55% 45%), hsl(170 60% 50%));
+    --gradient-amber: linear-gradient(135deg, hsl(45 90% 55%), hsl(25 90% 55%));
+    --gradient-rose: linear-gradient(135deg, hsl(340 75% 65%), hsl(320 65% 65%));
+    --gradient-indigo: linear-gradient(135deg, hsl(250 75% 58%), hsl(265 70% 55%));
+    --gradient-sky: linear-gradient(135deg, hsl(200 80% 60%), hsl(220 75% 55%));
+    --gradient-orange: linear-gradient(135deg, hsl(25 90% 55%), hsl(10 82% 55%));
+    --gradient-pink: linear-gradient(135deg, hsl(320 65% 65%), hsl(340 75% 60%));
+    --gradient-mint: linear-gradient(135deg, hsl(160 55% 45%), hsl(150 55% 50%));
+
+    /* Status */
+    --status-success: 152 45% 55%;
+    --status-warning: 45 70% 60%;
+    --status-error: 10 82% 55%;
+    --status-info: 220 75% 60%;
+    --status-pending: 45 70% 60%;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 12px -2px hsl(0 0% 0% / 0.35);
+    --shadow-lg: 0 12px 32px -8px hsl(0 0% 0% / 0.45);
+    --shadow-xl: 0 24px 48px -12px hsl(0 0% 0% / 0.55);
+    --shadow-card: 0 8px 32px -12px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 40px -8px hsl(250 75% 58% / 0.5);
+
+    /* Glass */
+    --glass-bg: 258 15% 18% / 0.7;
+    --glass-border: 0 0% 100% / 0.08;
+
+    /* Legacy compat */
+    --sv-primary: 250 75% 58%;
+    --sv-accent: 275 70% 55%;
+    --neon-teal: 170 60% 50%;
+    --neon-orange: 25 90% 55%;
+    --neon-green: 150 55% 50%;
+    --neon-violet: 275 70% 60%;
+    --neon-cyan: 190 75% 55%;
+    --neon-red: 10 82% 55%;
+    --neon-purple: 275 70% 60%;
+    --neon-blue: 220 75% 60%;
+    --neon-pink: 320 65% 65%;
+    --neon-gold: 45 90% 60%;
+    --sapphire: 220 75% 60%;
+    --aurora-violet: 275 70% 60%;
+    --aurora-purple: 275 70% 55%;
+    --aurora-blue: 220 75% 60%;
+    --aurora-cyan: 190 75% 55%;
+    --aurora-teal: 170 60% 50%;
+    --aurora-green: 150 55% 50%;
+    --aurora-lime: 90 60% 55%;
+    --aurora-gold: 45 90% 60%;
+    --aurora-orange: 25 90% 55%;
+    --aurora-rose: 340 75% 65%;
+    --aurora-pink: 320 65% 65%;
+    --aurora-magenta: 300 70% 60%;
+
+    --sv-navy-deep: 258 22% 10%;
+
+    /* Surface aliases used by utility classes */
+    --surface-1: 258 15% 18%;
+    --surface-3: 258 12% 26%;
+    --surface-elevated: 258 14% 24%;
+    --gradient-aurora: linear-gradient(135deg, hsl(250 75% 58%), hsl(275 70% 55%), hsl(200 80% 60%));
+    --gradient-sunset: linear-gradient(135deg, hsl(25 90% 55%), hsl(340 75% 60%));
+    --gradient-ocean: linear-gradient(135deg, hsl(200 80% 60%), hsl(170 60% 50%));
+    --gradient-cosmic: linear-gradient(135deg, hsl(275 70% 55%), hsl(220 75% 55%));
+  }
+
+  /* Dark Mode - Premium Dark */
+  .dark {
+    --background: 224 71% 8%;
+    --foreground: 220 20% 98%;
+
+    --card: 224 71% 11%;
+    --card-foreground: 220 20% 98%;
+
+    --popover: 224 71% 11%;
+    --popover-foreground: 220 20% 98%;
+
+    --primary: 243 75% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 224 50% 15%;
+    --secondary-foreground: 220 20% 98%;
+
+    --muted: 224 50% 15%;
+    --muted-foreground: 220 14% 60%;
+
+    --accent: 258 90% 70%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 220 20% 98%;
+
+    --border: 224 50% 18%;
+    --input: 224 50% 18%;
+    --ring: 243 75% 65%;
+
+    --sidebar-background: 243 75% 55%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 243 75% 55%;
+    --sidebar-accent: 243 75% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 243 60% 60%;
+    --sidebar-ring: 0 0% 100%;
+  }
+
+
+
 @theme inline {
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-brand: hsl(var(--brand));
+  --color-brand-foreground: hsl(var(--brand-foreground));
+  --color-brand-red: hsl(var(--brand-red));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-surface: hsl(var(--surface));
+  --color-surface-1: hsl(var(--surface-1));
+  --color-surface-2: hsl(var(--surface-2));
+  --color-surface-3: hsl(var(--surface-3));
+  --color-surface-elevated: hsl(var(--surface-elevated));
 
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --color-status-success: hsl(var(--status-success));
+  --color-status-warning: hsl(var(--status-warning));
+  --color-status-error: hsl(var(--status-error));
+  --color-status-info: hsl(var(--status-info));
+  --color-status-pending: hsl(var(--status-pending));
+
+  --color-aurora-violet: hsl(var(--aurora-violet));
+  --color-aurora-purple: hsl(var(--aurora-purple));
+  --color-aurora-blue: hsl(var(--aurora-blue));
+  --color-aurora-cyan: hsl(var(--aurora-cyan));
+  --color-aurora-teal: hsl(var(--aurora-teal));
+  --color-aurora-green: hsl(var(--aurora-green));
+  --color-aurora-lime: hsl(var(--aurora-lime));
+  --color-aurora-gold: hsl(var(--aurora-gold));
+  --color-aurora-orange: hsl(var(--aurora-orange));
+  --color-aurora-rose: hsl(var(--aurora-rose));
+  --color-aurora-pink: hsl(var(--aurora-pink));
+  --color-aurora-magenta: hsl(var(--aurora-magenta));
+
+  --color-neon-violet: hsl(var(--neon-violet));
+  --color-neon-cyan: hsl(var(--neon-cyan));
+  --color-neon-green: hsl(var(--neon-green));
+  --color-neon-orange: hsl(var(--neon-orange));
+  --color-neon-red: hsl(var(--neon-red));
+  --color-neon-purple: hsl(var(--neon-purple));
+  --color-neon-blue: hsl(var(--neon-blue));
+  --color-neon-teal: hsl(var(--neon-teal));
+  --color-neon-pink: hsl(var(--neon-pink));
+  --color-neon-gold: hsl(var(--neon-gold));
+  --color-sapphire: hsl(var(--sapphire));
 }
 
 @layer base {
   * {
-    border-color: var(--color-border);
+    @apply border-border;
   }
 
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Outfit', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 }
+
+@layer components {
+  /* ========================================
+     PREMIUM GLASS COMPONENTS
+     ======================================== */
+  
+  .glass-panel {
+    @apply bg-card/70 backdrop-blur-xl border border-border/40 rounded-xl;
+    box-shadow: 
+      0 0 0 1px hsl(var(--glass-border)),
+      0 8px 32px hsl(230 25% 4% / 0.4),
+      inset 0 1px 0 hsl(var(--aurora-violet) / 0.08);
+  }
+
+  .glass-panel-glow {
+    @apply bg-card/70 backdrop-blur-xl border border-border/40 rounded-xl;
+    box-shadow: 
+      0 0 0 1px hsl(var(--glass-border)),
+      0 0 40px hsl(var(--aurora-violet) / 0.15),
+      0 8px 32px hsl(230 25% 4% / 0.4),
+      inset 0 1px 0 hsl(var(--aurora-violet) / 0.1);
+  }
+
+  .glass-aurora {
+    @apply bg-card/60 backdrop-blur-2xl border border-primary/20 rounded-2xl;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--surface-2) / 0.9) 0%,
+      hsl(var(--surface-1) / 0.7) 100%
+    );
+    box-shadow: 
+      0 0 0 1px hsl(var(--aurora-violet) / 0.2),
+      0 0 60px hsl(var(--aurora-violet) / 0.1),
+      0 20px 60px hsl(230 25% 4% / 0.5);
+  }
+
+  /* ========================================
+     PREMIUM TEXT EFFECTS
+     ======================================== */
+  
+  .text-gradient-aurora {
+    background: var(--gradient-aurora);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-sunset {
+    background: var(--gradient-sunset);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-ocean {
+    background: var(--gradient-ocean);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-cosmic {
+    background: var(--gradient-cosmic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .neon-text {
+    @apply text-primary;
+    text-shadow: 0 0 20px hsl(var(--aurora-violet) / 0.8), 0 0 40px hsl(var(--aurora-violet) / 0.4);
+  }
+
+  .neon-text-cyan {
+    color: hsl(var(--aurora-cyan));
+    text-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.8), 0 0 40px hsl(var(--neon-cyan) / 0.4);
+  }
+
+  .neon-text-green {
+    color: hsl(var(--aurora-green));
+    text-shadow: 0 0 20px hsl(var(--neon-green) / 0.8), 0 0 40px hsl(var(--neon-green) / 0.4);
+  }
+
+  /* ========================================
+     PREMIUM BORDERS & GLOWS
+     ======================================== */
+  
+  .neon-border {
+    @apply border-primary/50;
+    box-shadow: 0 0 20px hsl(var(--aurora-violet) / 0.3), inset 0 0 20px hsl(var(--aurora-violet) / 0.1);
+  }
+
+  .border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--background), var(--background)) padding-box,
+                var(--gradient-aurora) border-box;
+    border-radius: var(--radius);
+  }
+
+  .glow-violet {
+    box-shadow: 0 0 30px hsl(var(--aurora-violet) / 0.4), 0 0 60px hsl(var(--aurora-violet) / 0.2);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 30px hsl(var(--aurora-cyan) / 0.4), 0 0 60px hsl(var(--aurora-cyan) / 0.2);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 30px hsl(var(--status-success) / 0.4), 0 0 60px hsl(var(--status-success) / 0.2);
+  }
+
+  /* ========================================
+     STATUS INDICATORS
+     ======================================== */
+  
+  .status-dot {
+    @apply w-2.5 h-2.5 rounded-full;
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .status-dot-online {
+    background: hsl(var(--status-success));
+    box-shadow: 0 0 12px hsl(var(--status-success) / 0.8);
+  }
+
+  .status-dot-warning {
+    background: hsl(var(--status-warning));
+    box-shadow: 0 0 12px hsl(var(--status-warning) / 0.8);
+  }
+
+  .status-dot-critical {
+    background: hsl(var(--status-error));
+    box-shadow: 0 0 12px hsl(var(--status-error) / 0.8);
+  }
+
+  .status-dot-info {
+    background: hsl(var(--status-info));
+    box-shadow: 0 0 12px hsl(var(--status-info) / 0.8);
+  }
+
+  .status-dot-pending {
+    background: hsl(var(--status-pending));
+    box-shadow: 0 0 12px hsl(var(--status-pending) / 0.8);
+  }
+
+  /* ========================================
+     PREMIUM BUTTONS
+     ======================================== */
+  
+  .btn-premium {
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+    background: var(--gradient-aurora);
+    color: white;
+    box-shadow: 0 4px 20px hsl(var(--aurora-violet) / 0.4);
+  }
+
+  .btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px hsl(var(--aurora-violet) / 0.5);
+  }
+
+  .btn-glass {
+    @apply px-5 py-2.5 rounded-xl font-medium transition-all duration-300;
+    @apply bg-card/60 backdrop-blur-xl border border-border/50;
+    @apply hover:bg-primary/20 hover:border-primary/50 hover:text-primary;
+    @apply active:scale-95;
+  }
+
+  .btn-outline-glow {
+    @apply px-5 py-2.5 rounded-xl font-medium transition-all duration-300;
+    @apply bg-transparent border-2 border-primary/60 text-primary;
+    @apply hover:bg-primary/10;
+    box-shadow: 0 0 20px hsl(var(--aurora-violet) / 0.2);
+  }
+
+  .btn-outline-glow:hover {
+    box-shadow: 0 0 30px hsl(var(--aurora-violet) / 0.4);
+  }
+
+  /* ========================================
+     PREMIUM CARDS
+     ======================================== */
+  
+  .metric-card {
+    @apply bg-card/70 backdrop-blur-xl border border-border/40 rounded-xl p-5 relative overflow-hidden;
+  }
+
+  .metric-card::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: radial-gradient(circle at 50% 0%, hsl(var(--aurora-violet) / 0.15) 0%, transparent 70%);
+  }
+
+  .metric-card:hover::before {
+    @apply opacity-100;
+  }
+
+  .card-aurora {
+    @apply relative overflow-hidden rounded-2xl;
+    background: linear-gradient(145deg, hsl(var(--surface-2)) 0%, hsl(var(--surface-1)) 100%);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .card-aurora::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500 pointer-events-none;
+    background: var(--gradient-aurora);
+    opacity: 0.05;
+  }
+
+  .card-aurora:hover::before {
+    opacity: 0.1;
+  }
+
+  /* ========================================
+     SIDEBAR COMPONENTS
+     ======================================== */
+  
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300;
+    @apply text-muted-foreground hover:text-foreground hover:bg-secondary/60;
+  }
+
+  .sidebar-item-active {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 bg-primary/15 text-primary;
+    border-left: 3px solid hsl(var(--primary));
+    box-shadow: inset 0 0 30px hsl(var(--aurora-violet) / 0.1);
+  }
+
+  /* ========================================
+     PREMIUM BACKGROUNDS
+     ======================================== */
+  
+  .bg-aurora-mesh {
+    background: 
+      radial-gradient(ellipse at 20% 0%, hsl(var(--aurora-violet) / 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 0%, hsl(var(--aurora-cyan) / 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 40% 100%, hsl(var(--aurora-purple) / 0.1) 0%, transparent 50%),
+      hsl(var(--background));
+  }
+
+  .bg-grid-premium {
+    background-image: 
+      linear-gradient(hsl(var(--border) / 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.15) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-dots {
+    background-image: radial-gradient(hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .grid-lines {
+    background-image: 
+      linear-gradient(hsl(var(--border) / 0.2) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* ========================================
+     BADGE COMPONENTS
+     ======================================== */
+  
+  .badge-premium {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background: var(--gradient-aurora);
+    color: white;
+  }
+
+  .badge-success {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--status-success) / 0.2);
+    color: hsl(var(--status-success));
+    border: 1px solid hsl(var(--status-success) / 0.3);
+  }
+
+  .badge-warning {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--status-warning) / 0.2);
+    color: hsl(var(--status-warning));
+    border: 1px solid hsl(var(--status-warning) / 0.3);
+  }
+
+  .badge-error {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--status-error) / 0.2);
+    color: hsl(var(--status-error));
+    border: 1px solid hsl(var(--status-error) / 0.3);
+  }
+
+  .badge-info {
+    @apply px-3 py-1 rounded-full text-xs font-semibold;
+    background: hsl(var(--status-info) / 0.2);
+    color: hsl(var(--status-info));
+    border: 1px solid hsl(var(--status-info) / 0.3);
+  }
+}
+
+@layer utilities {
+  /* ========================================
+     PREMIUM ANIMATIONS
+     ======================================== */
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-aurora {
+    animation: aurora 8s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  .animate-gradient {
+    animation: gradient-shift 5s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 20s linear infinite;
+  }
+
+  .animate-scan {
+    animation: scan 3s linear infinite;
+  }
+
+  .animate-ticker {
+    animation: ticker 30s linear infinite;
+  }
+
+  .animate-neon-pulse {
+    animation: neon-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-electric-border {
+    animation: electric-border 3s ease-in-out infinite;
+  }
+}
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.15); }
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 20px hsl(var(--aurora-violet) / 0.3); }
+  to { box-shadow: 0 0 50px hsl(var(--aurora-violet) / 0.6); }
+}
+
+@keyframes aurora {
+  0%, 100% { 
+    background-position: 0% 50%;
+    filter: hue-rotate(0deg);
+  }
+  50% { 
+    background-position: 100% 50%;
+    filter: hue-rotate(30deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes neon-pulse {
+  0%, 100% { 
+    box-shadow: 0 0 5px hsl(var(--aurora-violet) / 0.5), 0 0 20px hsl(var(--aurora-violet) / 0.3);
+    border-color: hsl(var(--aurora-violet) / 0.5);
+  }
+  50% { 
+    box-shadow: 0 0 20px hsl(var(--aurora-violet) / 0.8), 0 0 50px hsl(var(--aurora-violet) / 0.5);
+    border-color: hsl(var(--aurora-violet));
+  }
+}
+
+@keyframes electric-border {
+  0%, 100% { 
+    box-shadow: inset 0 0 0 1px hsl(var(--aurora-cyan) / 0.3), 0 0 20px hsl(var(--aurora-cyan) / 0.2);
+  }
+  50% { 
+    box-shadow: inset 0 0 0 2px hsl(var(--aurora-cyan) / 0.6), 0 0 40px hsl(var(--aurora-cyan) / 0.4);
+  }
+}
+
+@keyframes brain-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 15px hsl(var(--aurora-violet) / 0.5));
+    transform: scale(1);
+  }
+  50% { 
+    filter: drop-shadow(0 0 30px hsl(var(--aurora-violet) / 0.8));
+    transform: scale(1.05);
+  }
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--surface-1));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, hsl(var(--aurora-violet) / 0.5) 0%, hsl(var(--aurora-cyan) / 0.5) 100%);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, hsl(var(--aurora-violet) / 0.7) 0%, hsl(var(--aurora-cyan) / 0.7) 100%);
+}
+
+/* ========================================
+   GLOBAL EFFECTS & UTILITIES
+   ======================================== */
+
+/* Buzzer Blocking Overlay */
+/*
+  IMPORTANT:
+  We DISABLE the blocking overlay entirely to prevent "dead button" issues.
+  The buzzer-blocking class was causing clicks to be blocked even when
+  pointer-events: none was set, due to browser stacking context issues.
+  
+  SOLUTION: Remove the overlay completely and rely only on the buzzer UI
+  to get user attention via animations and toasts.
+*/
+body.buzzer-blocking::before {
+  /* Overlay disabled - was causing click blocking issues */
+  display: none;
+}
+
+body.buzzer-blocking {
+  /* Remove overflow: hidden to allow normal scrolling and interaction */
+  /* overflow: hidden; -- DISABLED */
+}
+
+/* Ensure the buzzer UI itself stays clickable above the visual overlay */
+body.buzzer-blocking .buzzer-alert-container {
+  z-index: 60 !important;
+  pointer-events: auto;
+}
+
+/* Focus Accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.keyboard-nav-indicator:focus-visible {
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.5);
+}
+
+.alert-safe-zone {
+  z-index: 45;
+  position: relative;
+}
+
+/* RTL Support */
+[dir="rtl"] .sidebar-nav {
+  text-align: right;
+}
+
+[dir="rtl"] .chat-message {
+  direction: rtl;
+}
+
+[dir="rtl"] .masked-id {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* ========================================
+   RESPONSIVE STYLES
+   ======================================== */
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+@media (max-width: 768px) {
+  .sidebar-collapsed {
+    width: 0 !important;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .sidebar-open {
+    position: fixed;
+    width: min(300px, 85vw);
+    z-index: 50;
+  }
+  
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+  
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-stack {
+    flex-direction: column;
+  }
+  
+  .mobile-full {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .tablet-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .desktop-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .desktop-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* ========================================
+   BUTTON CLICK FIX - CRITICAL
+   Ensures all buttons are clickable above any security overlays
+   ======================================== */
+
+/* All buttons must have pointer-events enabled and proper z-index */
+button,
+[role="button"],
+a,
+input,
+textarea,
+select,
+[type="button"],
+[type="submit"],
+[type="reset"],
+.btn-premium,
+.cursor-pointer {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* Disabled buttons still have not-allowed cursor */
+button:disabled,
+[role="button"][disabled],
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+}
+
+/* Security overlays must NOT block clicks */
+.security-overlay,
+.protection-overlay {
+  pointer-events: none !important;
+}
+
+/* Header and navigation must be above overlays */
+header,
+nav,
+.fixed-header,
+[role="navigation"],
+.sidebar,
+.header-actions {
+  position: relative;
+  z-index: 40;
+  pointer-events: auto !important;
+}
+
+/* Dialog and Modal must be clickable */
+[role="dialog"],
+[role="alertdialog"],
+.dialog-content,
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content] {
+  pointer-events: auto !important;
+  z-index: 50;
+}
+
+/* Fix for any invisible overlay blocking clicks */
+body::before,
+body::after {
+  pointer-events: none !important;
+  display: none !important;
+}
+
+/* CRITICAL: Images must not block clicks on underlying UI */
+img {
+  pointer-events: none !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+/* Re-enable pointer events for clickable images */
+a img,
+button img,
+[role="button"] img,
+.clickable-image {
+  pointer-events: auto !important;
+}
+
+/* EMERGENCY: Guarantee auth/forms stay clickable even if some wrapper breaks */
+form,
+form * {
+  pointer-events: auto;
+}
+
+button,
+[role="button"],
+button[type="submit"],
+input,
+textarea,
+select {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+}
+
+/* NOTE:
+   Avoid broad substring selectors like [class*="overlay"] / [class*="animation"].
+   Those can accidentally match real layout containers and disable the entire UI.
+   If a specific overlay ever blocks clicks, target it with a specific class/data-attr instead.
+*/
+
+/* Keep dialogs interactive */
+[role="dialog"],
+[role="alertdialog"],
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content] {
+  pointer-events: auto !important;
+}
+
+/* ============ UNIFIED DASHBOARD UTILITIES ============ */
+.bg-gradient-brand { background: var(--gradient-brand); }
+.bg-gradient-hero { background: var(--gradient-hero); }
+.bg-surface { background-color: hsl(var(--surface)); }
+.bg-surface-2 { background-color: hsl(var(--surface-2)); }
+.bg-brand { background-color: hsl(var(--brand)); }
+.text-brand { color: hsl(var(--brand)); }
+.text-brand-foreground { color: hsl(var(--brand-foreground)); }
+.border-brand { border-color: hsl(var(--brand)); }
+.shadow-card { box-shadow: var(--shadow-card); }
+.shadow-glow { box-shadow: var(--shadow-glow); }
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: hsl(0 0% 100% / 0.1); border-radius: 999px; }
+
+/* ────── AMS premium animation engine (from reference) ────── */
+@keyframes ams-fade-up  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes ams-scale-in { from { opacity: 0; transform: scale(0.985); } to { opacity: 1; transform: none; } }
+@keyframes ams-shimmer  { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes ams-glow-pulse { 0%,100% { box-shadow: 0 0 0 0 hsl(250 75% 58% / 0); } 50% { box-shadow: 0 0 24px -4px hsl(250 75% 58% / 0.45); } }
+
+.ams-section-enter { animation: ams-fade-up 340ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.ams-header-in     { animation: ams-scale-in 460ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+.ams-stagger > * { animation: ams-fade-up 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both; opacity: 0; }
+.ams-stagger > *:nth-child(1)  { animation-delay:  40ms; }
+.ams-stagger > *:nth-child(2)  { animation-delay:  90ms; }
+.ams-stagger > *:nth-child(3)  { animation-delay: 140ms; }
+.ams-stagger > *:nth-child(4)  { animation-delay: 190ms; }
+.ams-stagger > *:nth-child(5)  { animation-delay: 240ms; }
+.ams-stagger > *:nth-child(6)  { animation-delay: 290ms; }
+.ams-stagger > *:nth-child(7)  { animation-delay: 340ms; }
+.ams-stagger > *:nth-child(8)  { animation-delay: 380ms; }
+
+.ams-lift { transition: transform 220ms cubic-bezier(0.2,0.7,0.2,1), box-shadow 220ms cubic-bezier(0.2,0.7,0.2,1), border-color 220ms ease; }
+.ams-lift:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -18px hsl(0 0% 0% / 0.65); border-color: hsl(250 75% 58% / 0.45); }
+.ams-press { transition: transform 120ms ease; }
+.ams-press:active { transform: scale(0.975); }
+.ams-nav-item { transition: background-color 180ms ease, color 180ms ease, transform 180ms ease; }
+.ams-nav-item:hover:not(:disabled) { transform: translateX(2px); }
+.ams-shine { position: relative; overflow: hidden; }
+.ams-shine::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 30%, hsl(0 0% 100% / 0.09) 50%, transparent 70%); background-size: 200% 100%; animation: ams-shimmer 3.6s linear infinite; pointer-events: none; mix-blend-mode: overlay; }
+.ams-glow { animation: ams-glow-pulse 2.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ams-section-enter, .ams-header-in, .ams-stagger > *, .ams-shine::after, .ams-glow { animation: none !important; opacity: 1 !important; }
+  .ams-lift, .ams-press, .ams-nav-item { transition: none !important; }
+}
+
+/* Force dark theme as default (unified system) */
+html { color-scheme: dark; }
