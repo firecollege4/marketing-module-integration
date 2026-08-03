@@ -92,6 +92,7 @@ export async function recordAudit(entry: {
   entity_type: string;
   entity_id?: string;
   entity_name?: string;
+  module: string;
   details?: string;
 }) {
   const { error } = await supabase.from("marketing_audit_logs").insert(entry);
