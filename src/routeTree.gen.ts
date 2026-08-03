@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MarketingRouteImport } from './routes/marketing'
 import { Route as MarketingIndexRouteImport } from './routes/marketing.index'
+import { Route as MarketingCampaignsRouteImport } from './routes/marketing.campaigns'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,28 +29,36 @@ const MarketingIndexRoute = MarketingIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingCampaignsRoute = MarketingCampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
+  getParentRoute: () => MarketingRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/marketing': typeof MarketingRouteWithChildren
+  '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/': typeof MarketingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing': typeof MarketingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/marketing': typeof MarketingRouteWithChildren
+  '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/': typeof MarketingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/marketing' | '/marketing/'
+  fullPaths: '/' | '/marketing' | '/marketing/campaigns' | '/marketing/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/marketing'
-  id: '__root__' | '/' | '/marketing' | '/marketing/'
+  to: '/' | '/marketing/campaigns' | '/marketing'
+  id: '__root__' | '/' | '/marketing' | '/marketing/campaigns' | '/marketing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,14 +89,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/campaigns': {
+      id: '/marketing/campaigns'
+      path: '/campaigns'
+      fullPath: '/marketing/campaigns'
+      preLoaderRoute: typeof MarketingCampaignsRouteImport
+      parentRoute: typeof MarketingRoute
+    }
   }
 }
 
 interface MarketingRouteChildren {
+  MarketingCampaignsRoute: typeof MarketingCampaignsRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
 const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingCampaignsRoute: MarketingCampaignsRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
 
@@ -102,13 +120,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
