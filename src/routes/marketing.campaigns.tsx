@@ -436,7 +436,7 @@ function CampaignsScreen() {
         >
           {(data) => (
             <div className="overflow-x-auto">
-              <Table>
+              <Table className="min-w-[1180px]">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Campaign</TableHead>
