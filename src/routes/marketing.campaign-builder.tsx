@@ -223,7 +223,10 @@ function CampaignBuilderScreen() {
 
   const submitGroup = () => {
     if (!groupForm || !selected) return;
-    if (!groupForm.name.trim()) return toast.error("Ad group name is required");
+    if (!groupForm.name.trim()) {
+      toast.error("Ad group name is required");
+      return;
+    }
 
     const values = {
       campaign_id: selected.id,
@@ -284,7 +287,10 @@ function CampaignBuilderScreen() {
 
   const submitCreative = () => {
     if (!creativeForm || !selected) return;
-    if (!creativeForm.name.trim()) return toast.error("Creative name is required");
+    if (!creativeForm.name.trim()) {
+      toast.error("Creative name is required");
+      return;
+    }
 
     const values = {
       campaign_id: selected.id,
