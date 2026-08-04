@@ -12,12 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MarketingRouteImport } from './routes/marketing'
 import { Route as MarketingIndexRouteImport } from './routes/marketing.index'
+import { Route as MarketingApprovalsRouteImport } from './routes/marketing.approvals'
 import { Route as MarketingCampaignBuilderRouteImport } from './routes/marketing.campaign-builder'
 import { Route as MarketingCampaignsRouteImport } from './routes/marketing.campaigns'
 import { Route as MarketingContentRouteImport } from './routes/marketing.content'
 import { Route as MarketingCreativesRouteImport } from './routes/marketing.creatives'
+import { Route as MarketingLeadSourcesRouteImport } from './routes/marketing.lead-sources'
 import { Route as MarketingOffersRouteImport } from './routes/marketing.offers'
+import { Route as MarketingReportsRouteImport } from './routes/marketing.reports'
 import { Route as MarketingSchedulesRouteImport } from './routes/marketing.schedules'
+import { Route as MarketingSeoRouteImport } from './routes/marketing.seo'
 import { Route as MarketingTargetingRouteImport } from './routes/marketing.targeting'
 
 const IndexRoute = IndexRouteImport.update({
@@ -33,6 +37,11 @@ const MarketingRoute = MarketingRouteImport.update({
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingApprovalsRoute = MarketingApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
   getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingCampaignBuilderRoute =
@@ -56,14 +65,29 @@ const MarketingCreativesRoute = MarketingCreativesRouteImport.update({
   path: '/creatives',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingLeadSourcesRoute = MarketingLeadSourcesRouteImport.update({
+  id: '/lead-sources',
+  path: '/lead-sources',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const MarketingOffersRoute = MarketingOffersRouteImport.update({
   id: '/offers',
   path: '/offers',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingReportsRoute = MarketingReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const MarketingSchedulesRoute = MarketingSchedulesRouteImport.update({
   id: '/schedules',
   path: '/schedules',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingSeoRoute = MarketingSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
   getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingTargetingRoute = MarketingTargetingRouteImport.update({
@@ -75,23 +99,31 @@ const MarketingTargetingRoute = MarketingTargetingRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/marketing': typeof MarketingRouteWithChildren
+  '/marketing/approvals': typeof MarketingApprovalsRoute
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/lead-sources': typeof MarketingLeadSourcesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/reports': typeof MarketingReportsRoute
   '/marketing/schedules': typeof MarketingSchedulesRoute
+  '/marketing/seo': typeof MarketingSeoRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing/': typeof MarketingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/marketing/approvals': typeof MarketingApprovalsRoute
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/lead-sources': typeof MarketingLeadSourcesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/reports': typeof MarketingReportsRoute
   '/marketing/schedules': typeof MarketingSchedulesRoute
+  '/marketing/seo': typeof MarketingSeoRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing': typeof MarketingIndexRoute
 }
@@ -99,12 +131,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/marketing': typeof MarketingRouteWithChildren
+  '/marketing/approvals': typeof MarketingApprovalsRoute
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/lead-sources': typeof MarketingLeadSourcesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/reports': typeof MarketingReportsRoute
   '/marketing/schedules': typeof MarketingSchedulesRoute
+  '/marketing/seo': typeof MarketingSeoRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing/': typeof MarketingIndexRoute
 }
@@ -113,35 +149,47 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/marketing'
+    | '/marketing/approvals'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/lead-sources'
     | '/marketing/offers'
+    | '/marketing/reports'
     | '/marketing/schedules'
+    | '/marketing/seo'
     | '/marketing/targeting'
     | '/marketing/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/marketing/approvals'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/lead-sources'
     | '/marketing/offers'
+    | '/marketing/reports'
     | '/marketing/schedules'
+    | '/marketing/seo'
     | '/marketing/targeting'
     | '/marketing'
   id:
     | '__root__'
     | '/'
     | '/marketing'
+    | '/marketing/approvals'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/lead-sources'
     | '/marketing/offers'
+    | '/marketing/reports'
     | '/marketing/schedules'
+    | '/marketing/seo'
     | '/marketing/targeting'
     | '/marketing/'
   fileRoutesById: FileRoutesById
@@ -174,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/approvals': {
+      id: '/marketing/approvals'
+      path: '/approvals'
+      fullPath: '/marketing/approvals'
+      preLoaderRoute: typeof MarketingApprovalsRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/marketing/campaign-builder': {
       id: '/marketing/campaign-builder'
       path: '/campaign-builder'
@@ -202,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingCreativesRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/lead-sources': {
+      id: '/marketing/lead-sources'
+      path: '/lead-sources'
+      fullPath: '/marketing/lead-sources'
+      preLoaderRoute: typeof MarketingLeadSourcesRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/marketing/offers': {
       id: '/marketing/offers'
       path: '/offers'
@@ -209,11 +271,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingOffersRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/reports': {
+      id: '/marketing/reports'
+      path: '/reports'
+      fullPath: '/marketing/reports'
+      preLoaderRoute: typeof MarketingReportsRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/marketing/schedules': {
       id: '/marketing/schedules'
       path: '/schedules'
       fullPath: '/marketing/schedules'
       preLoaderRoute: typeof MarketingSchedulesRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/marketing/seo': {
+      id: '/marketing/seo'
+      path: '/seo'
+      fullPath: '/marketing/seo'
+      preLoaderRoute: typeof MarketingSeoRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/marketing/targeting': {
@@ -227,23 +303,31 @@ declare module '@tanstack/react-router' {
 }
 
 interface MarketingRouteChildren {
+  MarketingApprovalsRoute: typeof MarketingApprovalsRoute
   MarketingCampaignBuilderRoute: typeof MarketingCampaignBuilderRoute
   MarketingCampaignsRoute: typeof MarketingCampaignsRoute
   MarketingContentRoute: typeof MarketingContentRoute
   MarketingCreativesRoute: typeof MarketingCreativesRoute
+  MarketingLeadSourcesRoute: typeof MarketingLeadSourcesRoute
   MarketingOffersRoute: typeof MarketingOffersRoute
+  MarketingReportsRoute: typeof MarketingReportsRoute
   MarketingSchedulesRoute: typeof MarketingSchedulesRoute
+  MarketingSeoRoute: typeof MarketingSeoRoute
   MarketingTargetingRoute: typeof MarketingTargetingRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
 const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingApprovalsRoute: MarketingApprovalsRoute,
   MarketingCampaignBuilderRoute: MarketingCampaignBuilderRoute,
   MarketingCampaignsRoute: MarketingCampaignsRoute,
   MarketingContentRoute: MarketingContentRoute,
   MarketingCreativesRoute: MarketingCreativesRoute,
+  MarketingLeadSourcesRoute: MarketingLeadSourcesRoute,
   MarketingOffersRoute: MarketingOffersRoute,
+  MarketingReportsRoute: MarketingReportsRoute,
   MarketingSchedulesRoute: MarketingSchedulesRoute,
+  MarketingSeoRoute: MarketingSeoRoute,
   MarketingTargetingRoute: MarketingTargetingRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
