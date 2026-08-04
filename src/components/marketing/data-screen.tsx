@@ -353,20 +353,32 @@ export function DataScreen<T extends MarketingTable>({
 
   return (
     <div className="space-y-6">
-      <ScreenHeader
-        title={title}
-        description={description}
-        actions={
-          <>
-            <Button variant="outline" onClick={exportCsv}>
-              <Download className="mr-2 h-4 w-4" /> Export
-            </Button>
-            <Button onClick={openCreate}>
-              <Plus className="mr-2 h-4 w-4" /> New {entityLabel}
-            </Button>
-          </>
-        }
-      />
+      {headless ? (
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          <Button variant="outline" onClick={exportCsv}>
+            <Download className="mr-2 h-4 w-4" /> Export
+          </Button>
+          <Button onClick={openCreate}>
+            <Plus className="mr-2 h-4 w-4" /> New {entityLabel}
+          </Button>
+        </div>
+      ) : (
+        <ScreenHeader
+          title={title}
+          description={description}
+          actions={
+            <>
+              <Button variant="outline" onClick={exportCsv}>
+                <Download className="mr-2 h-4 w-4" /> Export
+              </Button>
+              <Button onClick={openCreate}>
+                <Plus className="mr-2 h-4 w-4" /> New {entityLabel}
+              </Button>
+            </>
+          }
+        />
+      )}
+
 
       {stats && stats.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
