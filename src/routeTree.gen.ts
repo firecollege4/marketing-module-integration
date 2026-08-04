@@ -14,6 +14,7 @@ import { Route as MarketingRouteImport } from './routes/marketing'
 import { Route as MarketingIndexRouteImport } from './routes/marketing.index'
 import { Route as MarketingCampaignBuilderRouteImport } from './routes/marketing.campaign-builder'
 import { Route as MarketingCampaignsRouteImport } from './routes/marketing.campaigns'
+import { Route as MarketingContentRouteImport } from './routes/marketing.content'
 import { Route as MarketingCreativesRouteImport } from './routes/marketing.creatives'
 
 const IndexRoute = IndexRouteImport.update({
@@ -42,6 +43,11 @@ const MarketingCampaignsRoute = MarketingCampaignsRouteImport.update({
   path: '/campaigns',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingContentRoute = MarketingContentRouteImport.update({
+  id: '/content',
+  path: '/content',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const MarketingCreativesRoute = MarketingCreativesRouteImport.update({
   id: '/creatives',
   path: '/creatives',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/marketing': typeof MarketingRouteWithChildren
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
+  '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing/': typeof MarketingIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
+  '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing': typeof MarketingIndexRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/marketing': typeof MarketingRouteWithChildren
   '/marketing/campaign-builder': typeof MarketingCampaignBuilderRoute
   '/marketing/campaigns': typeof MarketingCampaignsRoute
+  '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing/': typeof MarketingIndexRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/marketing'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
+    | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing/'
   fileRoutesByTo: FileRoutesByTo
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
+    | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing'
   id:
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/marketing'
     | '/marketing/campaign-builder'
     | '/marketing/campaigns'
+    | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing/'
   fileRoutesById: FileRoutesById
@@ -140,6 +152,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingCampaignsRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/content': {
+      id: '/marketing/content'
+      path: '/content'
+      fullPath: '/marketing/content'
+      preLoaderRoute: typeof MarketingContentRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/marketing/creatives': {
       id: '/marketing/creatives'
       path: '/creatives'
@@ -153,6 +172,7 @@ declare module '@tanstack/react-router' {
 interface MarketingRouteChildren {
   MarketingCampaignBuilderRoute: typeof MarketingCampaignBuilderRoute
   MarketingCampaignsRoute: typeof MarketingCampaignsRoute
+  MarketingContentRoute: typeof MarketingContentRoute
   MarketingCreativesRoute: typeof MarketingCreativesRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
@@ -160,6 +180,7 @@ interface MarketingRouteChildren {
 const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingCampaignBuilderRoute: MarketingCampaignBuilderRoute,
   MarketingCampaignsRoute: MarketingCampaignsRoute,
+  MarketingContentRoute: MarketingContentRoute,
   MarketingCreativesRoute: MarketingCreativesRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
