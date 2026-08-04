@@ -89,7 +89,7 @@ function AnalyticsScreen() {
         <StatCard
           label="Leads"
           value={compactNum(totalLeads)}
-          sublabel={totalLeads ? `${compactInr(totalSpend / totalLeads)} per lead` : undefined}
+          sublabel={totalLeads ? `${compactInr(totalSpend / totalLeads)} per lead` : ""}
           icon={Users}
           tone="blue"
           index={3}
