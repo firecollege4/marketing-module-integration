@@ -17,6 +17,7 @@ import { Route as MarketingCampaignsRouteImport } from './routes/marketing.campa
 import { Route as MarketingContentRouteImport } from './routes/marketing.content'
 import { Route as MarketingCreativesRouteImport } from './routes/marketing.creatives'
 import { Route as MarketingOffersRouteImport } from './routes/marketing.offers'
+import { Route as MarketingSchedulesRouteImport } from './routes/marketing.schedules'
 import { Route as MarketingTargetingRouteImport } from './routes/marketing.targeting'
 
 const IndexRoute = IndexRouteImport.update({
@@ -60,6 +61,11 @@ const MarketingOffersRoute = MarketingOffersRouteImport.update({
   path: '/offers',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingSchedulesRoute = MarketingSchedulesRouteImport.update({
+  id: '/schedules',
+  path: '/schedules',
+  getParentRoute: () => MarketingRoute,
+} as any)
 const MarketingTargetingRoute = MarketingTargetingRouteImport.update({
   id: '/targeting',
   path: '/targeting',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/schedules': typeof MarketingSchedulesRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing/': typeof MarketingIndexRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/schedules': typeof MarketingSchedulesRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing': typeof MarketingIndexRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
   '/marketing/offers': typeof MarketingOffersRoute
+  '/marketing/schedules': typeof MarketingSchedulesRoute
   '/marketing/targeting': typeof MarketingTargetingRoute
   '/marketing/': typeof MarketingIndexRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing/offers'
+    | '/marketing/schedules'
     | '/marketing/targeting'
     | '/marketing/'
   fileRoutesByTo: FileRoutesByTo
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing/offers'
+    | '/marketing/schedules'
     | '/marketing/targeting'
     | '/marketing'
   id:
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/marketing/content'
     | '/marketing/creatives'
     | '/marketing/offers'
+    | '/marketing/schedules'
     | '/marketing/targeting'
     | '/marketing/'
   fileRoutesById: FileRoutesById
@@ -197,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingOffersRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/schedules': {
+      id: '/marketing/schedules'
+      path: '/schedules'
+      fullPath: '/marketing/schedules'
+      preLoaderRoute: typeof MarketingSchedulesRouteImport
+      parentRoute: typeof MarketingRoute
+    }
     '/marketing/targeting': {
       id: '/marketing/targeting'
       path: '/targeting'
@@ -213,6 +232,7 @@ interface MarketingRouteChildren {
   MarketingContentRoute: typeof MarketingContentRoute
   MarketingCreativesRoute: typeof MarketingCreativesRoute
   MarketingOffersRoute: typeof MarketingOffersRoute
+  MarketingSchedulesRoute: typeof MarketingSchedulesRoute
   MarketingTargetingRoute: typeof MarketingTargetingRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
@@ -223,6 +243,7 @@ const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingContentRoute: MarketingContentRoute,
   MarketingCreativesRoute: MarketingCreativesRoute,
   MarketingOffersRoute: MarketingOffersRoute,
+  MarketingSchedulesRoute: MarketingSchedulesRoute,
   MarketingTargetingRoute: MarketingTargetingRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
