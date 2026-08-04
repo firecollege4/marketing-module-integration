@@ -16,6 +16,7 @@ import { Route as MarketingCampaignBuilderRouteImport } from './routes/marketing
 import { Route as MarketingCampaignsRouteImport } from './routes/marketing.campaigns'
 import { Route as MarketingContentRouteImport } from './routes/marketing.content'
 import { Route as MarketingCreativesRouteImport } from './routes/marketing.creatives'
+import { Route as MarketingOffersRouteImport } from './routes/marketing.offers'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,6 +54,11 @@ const MarketingCreativesRoute = MarketingCreativesRouteImport.update({
   path: '/creatives',
   getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingOffersRoute = MarketingOffersRouteImport.update({
+  id: '/offers',
+  path: '/offers',
+  getParentRoute: () => MarketingRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/offers': typeof MarketingOffersRoute
   '/marketing/': typeof MarketingIndexRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/offers': typeof MarketingOffersRoute
   '/marketing': typeof MarketingIndexRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/marketing/campaigns': typeof MarketingCampaignsRoute
   '/marketing/content': typeof MarketingContentRoute
   '/marketing/creatives': typeof MarketingCreativesRoute
+  '/marketing/offers': typeof MarketingOffersRoute
   '/marketing/': typeof MarketingIndexRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/offers'
     | '/marketing/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/offers'
     | '/marketing'
   id:
     | '__root__'
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/marketing/campaigns'
     | '/marketing/content'
     | '/marketing/creatives'
+    | '/marketing/offers'
     | '/marketing/'
   fileRoutesById: FileRoutesById
 }
@@ -166,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingCreativesRouteImport
       parentRoute: typeof MarketingRoute
     }
+    '/marketing/offers': {
+      id: '/marketing/offers'
+      path: '/offers'
+      fullPath: '/marketing/offers'
+      preLoaderRoute: typeof MarketingOffersRouteImport
+      parentRoute: typeof MarketingRoute
+    }
   }
 }
 
@@ -174,6 +193,7 @@ interface MarketingRouteChildren {
   MarketingCampaignsRoute: typeof MarketingCampaignsRoute
   MarketingContentRoute: typeof MarketingContentRoute
   MarketingCreativesRoute: typeof MarketingCreativesRoute
+  MarketingOffersRoute: typeof MarketingOffersRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
@@ -182,6 +202,7 @@ const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingCampaignsRoute: MarketingCampaignsRoute,
   MarketingContentRoute: MarketingContentRoute,
   MarketingCreativesRoute: MarketingCreativesRoute,
+  MarketingOffersRoute: MarketingOffersRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
 
