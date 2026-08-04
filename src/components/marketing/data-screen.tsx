@@ -214,6 +214,7 @@ export function DataScreen<T extends MarketingTable>({
   filterOptions,
   minWidth = 1000,
   extra,
+  headless,
 }: {
   table: T;
   title: string;
@@ -229,6 +230,7 @@ export function DataScreen<T extends MarketingTable>({
   filterOptions?: readonly string[];
   minWidth?: number;
   extra?: (rows: Row<T>[]) => ReactNode;
+  headless?: boolean;
 }) {
   const query = useQuery(tableQuery(table, order));
   const create = useCreateRow(table);
