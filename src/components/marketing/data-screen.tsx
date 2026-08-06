@@ -130,13 +130,21 @@ function formToPayload(form: Record<string, any>, fields: FieldDef[]) {
   return out;
 }
 
-function toCsv(rows: any[]) {
-  if (rows.length === 0) return "";
-  const headers = Object.keys(rows[0]);
-  const esc = (v: unknown) =>
-    `"${String(Array.isArray(v) ? v.join("|") : (v ?? "")).replace(/"/g, '""')}"`;
-  return [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+function compareValues(a: unknown, b: unknown) {
+  const an = typeof a === "number" ? a : Number(a);
+  const bn = typeof b === "number" ? b : Number(b);
+  if (!Number.isNaN(an) && !Number.isNaN(bn) && a !== null && b !== null && a !== "" && b !== "")
+    return an - bn;
+  const as = String(a ?? "");
+  const bs = String(b ?? "");
+  const ad = Date.parse(as);
+  const bd = Date.parse(bs);
+  if (!Number.isNaN(ad) && !Number.isNaN(bd)) return ad - bd;
+  return as.localeCompare(bs);
 }
+
+const PAGE_SIZE = 25;
+
 
 export function FieldEditor({
   fields,
