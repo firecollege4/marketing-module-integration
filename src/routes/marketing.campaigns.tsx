@@ -336,7 +336,13 @@ function CampaignsScreen() {
               <RefreshCw className={`h-4 w-4 ${campaigns.isFetching ? "animate-spin" : ""}`} />
               Refresh
             </Button>
-            <Button variant="outline" size="sm" onClick={exportCsv} disabled={filtered.length === 0}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void exportCsv()}
+              disabled={filtered.length === 0}
+            >
+
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
