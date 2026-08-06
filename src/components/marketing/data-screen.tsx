@@ -527,7 +527,37 @@ export function DataScreen<T extends MarketingTable>({
             </div>
           )}
         </QueryState>
+        {rows.length > PAGE_SIZE ? (
+          <div className="flex items-center justify-between pt-4 text-sm text-muted-foreground">
+            <span>
+              Showing {safePage * PAGE_SIZE + 1}–{Math.min(rows.length, (safePage + 1) * PAGE_SIZE)}{" "}
+              of {rows.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safePage === 0}
+                onClick={() => setPage(safePage - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span>
+                Page {safePage + 1} / {pageCount}
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safePage >= pageCount - 1}
+                onClick={() => setPage(safePage + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        ) : null}
       </SectionCard>
+
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
