@@ -184,12 +184,13 @@ function Alerts() {
                 className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border/50 p-3"
               >
                 <div className="min-w-0">
-                  <p className="flex flex-wrap items-center gap-2 text-sm font-medium">
+                  <div className="flex flex-wrap items-center gap-2 text-sm font-medium">
                     <AlertTriangle className="h-4 w-4 text-status-warning" />
                     {a.title}
                     <StatusBadge value={a.severity} />
                     <StatusBadge value={a.status} />
-                  </p>
+                  </div>
+
                   <p className="mt-1 text-sm text-muted-foreground">{a.message}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {titleCase(a.category)} · raised {dateTime(a.created_at)}
