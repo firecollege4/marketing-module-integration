@@ -11,7 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Activity, IndianRupee, MousePointerClick, Wallet } from "lucide-react";
+import { Activity, Download, IndianRupee, MousePointerClick, Wallet } from "lucide-react";
+import { toast } from "sonner";
 
 import {
   ProgressBar,
@@ -24,7 +25,9 @@ import {
   chartTooltipStyle,
 } from "@/components/marketing/kit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { tableQuery } from "@/lib/marketing/api";
+import { Button } from "@/components/ui/button";
+import { recordAudit, tableQuery } from "@/lib/marketing/api";
+import { buildCsv, csvFilename, downloadCsv } from "@/lib/marketing/csv";
 import { compactInr, compactNum, ctr, num, pct, roas, shortDate } from "@/lib/marketing/format";
 
 export const Route = createFileRoute("/marketing/performance")({
@@ -78,11 +81,63 @@ function PerformanceScreen() {
     revenue: Number(c.revenue ?? 0),
   }));
 
+  const exportRows = async (
+    label: string,
+    slug: string,
+    entity: string,
+    data: Array<Record<string, unknown>>,
+  ) => {
+    const csv = buildCsv(data);
+    if (!csv) {
+      toast.error(`No ${label} rows to export.`);
+      return;
+    }
+    await recordAudit({
+      actor: "Marketing Manager",
+      action: "export",
+      entity_type: entity,
+      entity_name: `${data.length} rows`,
+      module: "performance",
+      details: `Exported ${data.length} ${label} rows to CSV`,
+    });
+    downloadCsv(csvFilename(slug), csv);
+    toast.success(`Exported ${data.length} ${label} rows.`);
+  };
+
   return (
     <div className="space-y-6">
       <ScreenHeader
         title="Performance"
         description="Daily delivery, channel efficiency and budget pacing across the marketing portfolio."
+        actions={
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={snaps.length === 0}
+              onClick={() =>
+                void exportRows("KPI snapshot", "marketing-kpi-snapshots", "KPI snapshot", snaps)
+              }
+            >
+              <Download className="mr-2 h-4 w-4" /> Export KPI snapshots
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={(channels.data ?? []).length === 0}
+              onClick={() =>
+                void exportRows(
+                  "channel performance",
+                  "marketing-channel-performance",
+                  "Channel performance",
+                  channels.data ?? [],
+                )
+              }
+            >
+              <Download className="mr-2 h-4 w-4" /> Export channels
+            </Button>
+          </>
+        }
       />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
