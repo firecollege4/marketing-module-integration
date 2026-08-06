@@ -368,20 +368,24 @@ export function DataScreen<T extends MarketingTable>({
     });
   };
 
-  const exportCsv = () => {
-    const csv = toCsv(rows);
+  const exportCsv = async () => {
+    const csv = buildCsv(rows);
     if (!csv) {
       toast.error("Nothing to export.");
       return;
     }
-    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${table}-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Export ready.");
+    await recordAudit({
+      actor: "Marketing Manager",
+      action: "export",
+      entity_type: entityLabel,
+      entity_name: `${rows.length} rows`,
+      module,
+      details: `Exported ${rows.length} ${entityLabel.toLowerCase()} rows to CSV`,
+    });
+    downloadCsv(csvFilename(String(table)), csv);
+    toast.success(`Exported ${rows.length} rows.`);
   };
+
 
   return (
     <div className="space-y-6">
