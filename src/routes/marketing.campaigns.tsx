@@ -70,6 +70,8 @@ import {
   useUpdateRow,
   type Row,
 } from "@/lib/marketing/api";
+import { csvFilename, downloadCsv } from "@/lib/marketing/csv";
+
 import { compactInr, compactNum, ctr, inr, num, pct, roas, shortDate } from "@/lib/marketing/format";
 
 export const Route = createFileRoute("/marketing/campaigns")({
