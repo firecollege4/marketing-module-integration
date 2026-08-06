@@ -109,11 +109,12 @@ function Recommendations() {
                 <div key={r.id} className="rounded-lg border border-border/50 p-4">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+                      <div className="flex flex-wrap items-center gap-2 text-sm font-semibold">
                         {r.title}
                         <StatusBadge value={r.category} />
                         <StatusBadge value={r.status} />
-                      </p>
+                      </div>
+
                       <p className="mt-1 text-sm text-muted-foreground">{r.recommendation}</p>
                       {r.impact_estimate ? (
                         <p className="mt-1 text-xs text-aurora-teal">Impact: {r.impact_estimate}</p>
