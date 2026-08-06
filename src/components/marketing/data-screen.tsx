@@ -471,7 +471,7 @@ export function DataScreen<T extends MarketingTable>({
         <QueryState
           isLoading={query.isLoading}
           error={query.error}
-          data={rows}
+          data={pageRows}
           emptyMessage={`No ${entityLabel.toLowerCase()} records match your filters.`}
         >
           {(list) => (
@@ -481,7 +481,16 @@ export function DataScreen<T extends MarketingTable>({
                   <TableRow>
                     {columns.map((c) => (
                       <TableHead key={c.key} className={c.align === "right" ? "text-right" : ""}>
-                        {c.header}
+                        <button
+                          type="button"
+                          onClick={() => toggleSort(c.key)}
+                          className="inline-flex items-center gap-1 hover:text-foreground"
+                        >
+                          {c.header}
+                          <ArrowUpDown
+                            className={`h-3 w-3 ${sort?.key === c.key ? "opacity-100" : "opacity-30"}`}
+                          />
+                        </button>
                       </TableHead>
                     ))}
                     <TableHead className="text-right">Actions</TableHead>
@@ -489,6 +498,7 @@ export function DataScreen<T extends MarketingTable>({
                 </TableHeader>
                 <TableBody>
                   {list.map((row: any) => (
+
                     <TableRow key={row.id}>
                       {columns.map((c) => (
                         <TableCell key={c.key} className={c.align === "right" ? "text-right" : ""}>
