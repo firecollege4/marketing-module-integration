@@ -70,6 +70,8 @@ import {
   useUpdateRow,
   type Row,
 } from "@/lib/marketing/api";
+import { csvFilename, downloadCsv } from "@/lib/marketing/csv";
+
 import { compactInr, compactNum, ctr, inr, num, pct, roas, shortDate } from "@/lib/marketing/format";
 
 export const Route = createFileRoute("/marketing/campaigns")({
@@ -287,23 +289,19 @@ function CampaignsScreen() {
     });
   };
 
-  const exportCsv = () => {
-    const blob = new Blob([toCsv(filtered)], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `software-vala-campaigns-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    void recordAudit({
+  const exportCsv = async () => {
+    // Audit first: the download click can cancel in-flight requests in some browsers.
+    await recordAudit({
       actor: "marketing_manager",
       action: "export",
       entity_type: "campaign",
       module: "campaigns",
       details: `Exported ${filtered.length} campaigns to CSV`,
     });
+    downloadCsv(csvFilename("software-vala-campaigns"), toCsv(filtered));
     toast.success(`Exported ${filtered.length} campaigns`);
   };
+
 
   const refreshAll = () => {
     void Promise.all([
@@ -338,7 +336,13 @@ function CampaignsScreen() {
               <RefreshCw className={`h-4 w-4 ${campaigns.isFetching ? "animate-spin" : ""}`} />
               Refresh
             </Button>
-            <Button variant="outline" size="sm" onClick={exportCsv} disabled={filtered.length === 0}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void exportCsv()}
+              disabled={filtered.length === 0}
+            >
+
               <Download className="h-4 w-4" />
               Export CSV
             </Button>

@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import {
@@ -57,6 +57,8 @@ import {
   type OrderSpec,
   type Row,
 } from "@/lib/marketing/api";
+import { buildCsv, csvFilename, downloadCsv } from "@/lib/marketing/csv";
+
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -130,13 +132,21 @@ function formToPayload(form: Record<string, any>, fields: FieldDef[]) {
   return out;
 }
 
-function toCsv(rows: any[]) {
-  if (rows.length === 0) return "";
-  const headers = Object.keys(rows[0]);
-  const esc = (v: unknown) =>
-    `"${String(Array.isArray(v) ? v.join("|") : (v ?? "")).replace(/"/g, '""')}"`;
-  return [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+function compareValues(a: unknown, b: unknown) {
+  const an = typeof a === "number" ? a : Number(a);
+  const bn = typeof b === "number" ? b : Number(b);
+  if (!Number.isNaN(an) && !Number.isNaN(bn) && a !== null && b !== null && a !== "" && b !== "")
+    return an - bn;
+  const as = String(a ?? "");
+  const bs = String(b ?? "");
+  const ad = Date.parse(as);
+  const bd = Date.parse(bs);
+  if (!Number.isNaN(ad) && !Number.isNaN(bd)) return ad - bd;
+  return as.localeCompare(bs);
 }
+
+const PAGE_SIZE = 25;
+
 
 export function FieldEditor({
   fields,
@@ -243,19 +253,43 @@ export function DataScreen<T extends MarketingTable>({
   const [form, setForm] = useState<Record<string, any>>(() => defaultsFor(fields));
   const [open, setOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
+  const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" } | null>(null);
+  const [page, setPage] = useState(0);
 
   const allRows = (query.data ?? []) as any[];
 
   const rows = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return allRows.filter((r) => {
+    const filtered = allRows.filter((r) => {
       const matchesTerm =
         !term ||
         searchKeys.some((k) => String(r[k] ?? "").toLowerCase().includes(term));
       const matchesFilter = filter === "all" || !filterKey || String(r[filterKey]) === filter;
       return matchesTerm && matchesFilter;
     });
-  }, [allRows, search, filter, filterKey, searchKeys]);
+    if (!sort) return filtered;
+    const sorted = [...filtered].sort((a, b) => compareValues(a[sort.key], b[sort.key]));
+    return sort.dir === "asc" ? sorted : sorted.reverse();
+  }, [allRows, search, filter, filterKey, searchKeys, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageRows = useMemo(
+    () => rows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE),
+    [rows, safePage],
+  );
+
+  const toggleSort = (key: string) => {
+    setPage(0);
+    setSort((prev) =>
+      prev?.key === key
+        ? prev.dir === "asc"
+          ? { key, dir: "desc" }
+          : null
+        : { key, dir: "asc" },
+    );
+  };
+
 
   const nameOf = (row: any) =>
     String(row.name ?? row.title ?? row.keyword ?? row.item ?? row.full_name ?? row.url ?? row.id);
@@ -336,26 +370,30 @@ export function DataScreen<T extends MarketingTable>({
     });
   };
 
-  const exportCsv = () => {
-    const csv = toCsv(rows);
+  const exportCsv = async () => {
+    const csv = buildCsv(rows);
     if (!csv) {
       toast.error("Nothing to export.");
       return;
     }
-    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${table}-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Export ready.");
+    await recordAudit({
+      actor: "Marketing Manager",
+      action: "export",
+      entity_type: entityLabel,
+      entity_name: `${rows.length} rows`,
+      module,
+      details: `Exported ${rows.length} ${entityLabel.toLowerCase()} rows to CSV`,
+    });
+    downloadCsv(csvFilename(String(table)), csv);
+    toast.success(`Exported ${rows.length} rows.`);
   };
+
 
   return (
     <div className="space-y-6">
       {headless ? (
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <Button variant="outline" onClick={exportCsv}>
+          <Button variant="outline" onClick={() => void exportCsv()}>
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button onClick={openCreate}>
@@ -368,7 +406,7 @@ export function DataScreen<T extends MarketingTable>({
           description={description}
           actions={
             <>
-              <Button variant="outline" onClick={exportCsv}>
+              <Button variant="outline" onClick={() => void exportCsv()}>
                 <Download className="mr-2 h-4 w-4" /> Export
               </Button>
               <Button onClick={openCreate}>
@@ -407,13 +445,13 @@ export function DataScreen<T extends MarketingTable>({
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => { setSearch(e.target.value); setPage(0); }}
                 placeholder="Search…"
                 className="w-52 pl-8"
               />
             </div>
             {filterKey && filterOptions ? (
-              <Select value={filter} onValueChange={setFilter}>
+              <Select value={filter} onValueChange={(v) => { setFilter(v); setPage(0); }}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
@@ -433,7 +471,7 @@ export function DataScreen<T extends MarketingTable>({
         <QueryState
           isLoading={query.isLoading}
           error={query.error}
-          data={rows}
+          data={pageRows}
           emptyMessage={`No ${entityLabel.toLowerCase()} records match your filters.`}
         >
           {(list) => (
@@ -443,7 +481,16 @@ export function DataScreen<T extends MarketingTable>({
                   <TableRow>
                     {columns.map((c) => (
                       <TableHead key={c.key} className={c.align === "right" ? "text-right" : ""}>
-                        {c.header}
+                        <button
+                          type="button"
+                          onClick={() => toggleSort(c.key)}
+                          className="inline-flex items-center gap-1 hover:text-foreground"
+                        >
+                          {c.header}
+                          <ArrowUpDown
+                            className={`h-3 w-3 ${sort?.key === c.key ? "opacity-100" : "opacity-30"}`}
+                          />
+                        </button>
                       </TableHead>
                     ))}
                     <TableHead className="text-right">Actions</TableHead>
@@ -451,6 +498,7 @@ export function DataScreen<T extends MarketingTable>({
                 </TableHeader>
                 <TableBody>
                   {list.map((row: any) => (
+
                     <TableRow key={row.id}>
                       {columns.map((c) => (
                         <TableCell key={c.key} className={c.align === "right" ? "text-right" : ""}>
@@ -479,7 +527,37 @@ export function DataScreen<T extends MarketingTable>({
             </div>
           )}
         </QueryState>
+        {rows.length > PAGE_SIZE ? (
+          <div className="flex items-center justify-between pt-4 text-sm text-muted-foreground">
+            <span>
+              Showing {safePage * PAGE_SIZE + 1}–{Math.min(rows.length, (safePage + 1) * PAGE_SIZE)}{" "}
+              of {rows.length}
+            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safePage === 0}
+                onClick={() => setPage(safePage - 1)}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <span>
+                Page {safePage + 1} / {pageCount}
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={safePage >= pageCount - 1}
+                onClick={() => setPage(safePage + 1)}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        ) : null}
       </SectionCard>
+
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
