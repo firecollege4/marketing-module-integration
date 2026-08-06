@@ -393,7 +393,7 @@ export function DataScreen<T extends MarketingTable>({
     <div className="space-y-6">
       {headless ? (
         <div className="flex flex-wrap items-center justify-end gap-2">
-          <Button variant="outline" onClick={exportCsv}>
+          <Button variant="outline" onClick={() => void exportCsv()}>
             <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button onClick={openCreate}>
@@ -406,7 +406,7 @@ export function DataScreen<T extends MarketingTable>({
           description={description}
           actions={
             <>
-              <Button variant="outline" onClick={exportCsv}>
+              <Button variant="outline" onClick={() => void exportCsv()}>
                 <Download className="mr-2 h-4 w-4" /> Export
               </Button>
               <Button onClick={openCreate}>
@@ -445,13 +445,13 @@ export function DataScreen<T extends MarketingTable>({
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => { setSearch(e.target.value); setPage(0); }}
                 placeholder="Search…"
                 className="w-52 pl-8"
               />
             </div>
             {filterKey && filterOptions ? (
-              <Select value={filter} onValueChange={setFilter}>
+              <Select value={filter} onValueChange={(v) => { setFilter(v); setPage(0); }}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
