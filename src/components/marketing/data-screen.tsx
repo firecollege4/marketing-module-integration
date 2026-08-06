@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
+import { ArrowUpDown, ChevronLeft, ChevronRight, Download, Pencil, Plus, Search, Trash2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 import {
