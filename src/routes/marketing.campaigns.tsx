@@ -287,23 +287,19 @@ function CampaignsScreen() {
     });
   };
 
-  const exportCsv = () => {
-    const blob = new Blob([toCsv(filtered)], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `software-vala-campaigns-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    void recordAudit({
+  const exportCsv = async () => {
+    // Audit first: the download click can cancel in-flight requests in some browsers.
+    await recordAudit({
       actor: "marketing_manager",
       action: "export",
       entity_type: "campaign",
       module: "campaigns",
       details: `Exported ${filtered.length} campaigns to CSV`,
     });
+    downloadCsv(csvFilename("software-vala-campaigns"), toCsv(filtered));
     toast.success(`Exported ${filtered.length} campaigns`);
   };
+
 
   const refreshAll = () => {
     void Promise.all([
