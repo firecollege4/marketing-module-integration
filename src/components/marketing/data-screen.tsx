@@ -251,19 +251,43 @@ export function DataScreen<T extends MarketingTable>({
   const [form, setForm] = useState<Record<string, any>>(() => defaultsFor(fields));
   const [open, setOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
+  const [sort, setSort] = useState<{ key: string; dir: "asc" | "desc" } | null>(null);
+  const [page, setPage] = useState(0);
 
   const allRows = (query.data ?? []) as any[];
 
   const rows = useMemo(() => {
     const term = search.trim().toLowerCase();
-    return allRows.filter((r) => {
+    const filtered = allRows.filter((r) => {
       const matchesTerm =
         !term ||
         searchKeys.some((k) => String(r[k] ?? "").toLowerCase().includes(term));
       const matchesFilter = filter === "all" || !filterKey || String(r[filterKey]) === filter;
       return matchesTerm && matchesFilter;
     });
-  }, [allRows, search, filter, filterKey, searchKeys]);
+    if (!sort) return filtered;
+    const sorted = [...filtered].sort((a, b) => compareValues(a[sort.key], b[sort.key]));
+    return sort.dir === "asc" ? sorted : sorted.reverse();
+  }, [allRows, search, filter, filterKey, searchKeys, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageRows = useMemo(
+    () => rows.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE),
+    [rows, safePage],
+  );
+
+  const toggleSort = (key: string) => {
+    setPage(0);
+    setSort((prev) =>
+      prev?.key === key
+        ? prev.dir === "asc"
+          ? { key, dir: "desc" }
+          : null
+        : { key, dir: "asc" },
+    );
+  };
+
 
   const nameOf = (row: any) =>
     String(row.name ?? row.title ?? row.keyword ?? row.item ?? row.full_name ?? row.url ?? row.id);
