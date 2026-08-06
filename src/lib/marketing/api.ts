@@ -17,22 +17,29 @@ const from = (table: MarketingTable) => supabase.from(table) as any;
 
 export type OrderSpec = { column: string; ascending?: boolean };
 
+/** Hard cap so a large table can never stall a screen with an unbounded read. */
+export const MAX_ROWS = 2000;
+
 export const marketingKey = (table: MarketingTable, order?: OrderSpec) =>
   ["marketing", table, order?.column ?? null, order?.ascending ?? null] as const;
 
-export function tableQuery<T extends MarketingTable>(table: T, order?: OrderSpec) {
+export function tableQuery<T extends MarketingTable>(table: T, order?: OrderSpec, limit = MAX_ROWS) {
   return queryOptions({
-    queryKey: marketingKey(table, order),
+    queryKey: [...marketingKey(table, order), limit] as const,
     queryFn: async (): Promise<Array<Row<T>>> => {
       let builder = from(table).select("*");
       if (order) builder = builder.order(order.column, { ascending: order.ascending ?? false });
-      const { data, error } = await builder;
+      const { data, error } = await builder.limit(limit);
       if (error) throw new Error(error.message);
+      if ((data?.length ?? 0) === limit)
+        console.warn(`[marketing] ${table} hit the ${limit}-row read cap.`);
       return (data ?? []) as Array<Row<T>>;
     },
     staleTime: 30_000,
+    gcTime: 5 * 60_000,
   });
 }
+
 
 async function insertRow<T extends MarketingTable>(table: T, values: InsertRow<T>) {
   const { data, error } = await from(table).insert(values).select().single();
