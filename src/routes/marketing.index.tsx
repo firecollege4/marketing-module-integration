@@ -266,10 +266,10 @@ function MarketingOverview() {
                         <TableCell>
                           <StatusBadge value={c.status} />
                         </TableCell>
-                        <TableCell className="text-right">{compactInr(Number(c.spend))}</TableCell>
-                        <TableCell className="text-right">{compactNum(Number(c.leads))}</TableCell>
+                        <TableCell className="text-right">{compactInr(toNum(c.spend))}</TableCell>
+                        <TableCell className="text-right">{compactNum(toNum(c.leads))}</TableCell>
                         <TableCell className="text-right font-medium text-status-success">
-                          {roas(Number(c.revenue), Number(c.spend)).toFixed(1)}x
+                          {roas(toNum(c.revenue), toNum(c.spend)).toFixed(1)}x
                         </TableCell>
                         <TableCell className="text-muted-foreground">{shortDate(c.end_date)}</TableCell>
                       </TableRow>
