@@ -1,3 +1,10 @@
+/** NaN-safe numeric coercion for values coming back from the database
+ *  (nullable columns, numeric-as-string, malformed rows). */
+export const toNum = (value: unknown): number => {
+  const n = typeof value === "number" ? value : Number(value ?? 0);
+  return Number.isFinite(n) ? n : 0;
+};
+
 export const inr = (value: number | null | undefined) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",

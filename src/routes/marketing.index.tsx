@@ -29,7 +29,7 @@ import {
 } from "@/components/marketing/kit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { tableQuery } from "@/lib/marketing/api";
-import { compactInr, compactNum, ctr, dateTime, pct, roas, shortDate } from "@/lib/marketing/format";
+import { compactInr, compactNum, ctr, dateTime, pct, roas, shortDate, toNum } from "@/lib/marketing/format";
 
 export const Route = createFileRoute("/marketing/")({
   head: () => ({
@@ -59,12 +59,12 @@ function MarketingOverview() {
   const rows = snapshots.data ?? [];
   const totals = rows.reduce(
     (acc, r) => ({
-      spend: acc.spend + Number(r.spend),
-      leads: acc.leads + r.leads,
-      conversions: acc.conversions + r.conversions,
-      revenue: acc.revenue + Number(r.revenue),
-      clicks: acc.clicks + Number(r.clicks),
-      impressions: acc.impressions + Number(r.impressions),
+      spend: acc.spend + toNum(r.spend),
+      leads: acc.leads + toNum(r.leads),
+      conversions: acc.conversions + toNum(r.conversions),
+      revenue: acc.revenue + toNum(r.revenue),
+      clicks: acc.clicks + toNum(r.clicks),
+      impressions: acc.impressions + toNum(r.impressions),
     }),
     { spend: 0, leads: 0, conversions: 0, revenue: 0, clicks: 0, impressions: 0 },
   );
@@ -80,16 +80,16 @@ function MarketingOverview() {
 
   const trend = rows.map((r) => ({
     date: new Date(r.metric_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }),
-    spend: Number(r.spend),
-    revenue: Number(r.revenue),
-    leads: r.leads,
+    spend: toNum(r.spend),
+    revenue: toNum(r.revenue),
+    leads: toNum(r.leads),
   }));
 
   const channelMix = (channels.data ?? []).map((c) => ({
     name: c.channel,
-    value: Number(c.spend),
-    revenue: Number(c.revenue),
-    roas: Number(c.roas),
+    value: toNum(c.spend),
+    revenue: toNum(c.revenue),
+    roas: toNum(c.roas),
   }));
 
   const topCampaigns = (campaigns.data ?? []).slice(0, 6);
@@ -108,7 +108,7 @@ function MarketingOverview() {
           label="Spend"
           value={compactInr(totals.spend)}
           sublabel="Last 30 days"
-          delta={delta((r) => Number(r.spend))}
+          delta={delta((r) => toNum(r.spend))}
           icon={IndianRupee}
           tone="violet"
         />
@@ -117,7 +117,7 @@ function MarketingOverview() {
           label="Revenue"
           value={compactInr(totals.revenue)}
           sublabel="Attributed"
-          delta={delta((r) => Number(r.revenue))}
+          delta={delta((r) => toNum(r.revenue))}
           icon={TrendingUp}
           tone="green"
         />
@@ -266,10 +266,10 @@ function MarketingOverview() {
                         <TableCell>
                           <StatusBadge value={c.status} />
                         </TableCell>
-                        <TableCell className="text-right">{compactInr(Number(c.spend))}</TableCell>
-                        <TableCell className="text-right">{compactNum(Number(c.leads))}</TableCell>
+                        <TableCell className="text-right">{compactInr(toNum(c.spend))}</TableCell>
+                        <TableCell className="text-right">{compactNum(toNum(c.leads))}</TableCell>
                         <TableCell className="text-right font-medium text-status-success">
-                          {roas(Number(c.revenue), Number(c.spend)).toFixed(1)}x
+                          {roas(toNum(c.revenue), toNum(c.spend)).toFixed(1)}x
                         </TableCell>
                         <TableCell className="text-muted-foreground">{shortDate(c.end_date)}</TableCell>
                       </TableRow>
