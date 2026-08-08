@@ -40,8 +40,9 @@ SCREENSHOTS = Path(__file__).parent / "screenshots"
 # Runs in the page. Collects every <img>, <svg>, and role=img that either is
 # interactive itself or sits inside an interactive ancestor (button, link,
 # [role=button], [onclick], .cursor-pointer), then checks that:
-#   1. computed pointer-events is not "none" on the image or its ancestors
-#   2. the element's centre point hit-tests back to itself or its interactive ancestor
+#   1. the interactive trigger and its ancestors are not pointer-events:none/hidden
+#      (an icon with pointer-events:none inside a button is expected and fine)
+#   2. the image's centre point hit-tests back to itself or its interactive trigger
 COLLECT = """
 () => {
   const INTERACTIVE = 'a,button,[role="button"],[role="link"],[role="tab"],[onclick],label,summary,.cursor-pointer';
@@ -56,15 +57,16 @@ COLLECT = """
     if (rect.width === 0 || rect.height === 0) continue;
     if (rect.bottom < 0 || rect.top > window.innerHeight) continue;
 
-    // pointer-events chain
+    // pointer-events chain, checked from the interactive trigger upwards.
+    // An icon with pointer-events:none inside a button is fine (shadcn does this
+    // on purpose) as long as the button itself still receives the click.
     let blockedBy = null;
-    for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+    for (let n = trigger; n && n !== document.documentElement; n = n.parentElement) {
       const cs = getComputedStyle(n);
-      if (cs.pointerEvents === 'none') {
-        blockedBy = n.tagName.toLowerCase() + (n.className && typeof n.className === 'string' ? '.' + n.className.split(' ').filter(Boolean).slice(0,2).join('.') : '');
+      if (cs.pointerEvents === 'none' || cs.visibility === 'hidden' || cs.display === 'none') {
+        blockedBy = n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.split(' ').filter(Boolean).slice(0,2).join('.') : '');
         break;
       }
-      if (n === trigger) break;
     }
 
     // hit-test the centre point
