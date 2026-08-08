@@ -108,7 +108,7 @@ function rowToForm(row: any, fields: FieldDef[]): Record<string, any> {
   const out: Record<string, any> = {};
   for (const f of fields) {
     const v = row[f.key];
-    if (f.kind === "number") out[f.key] = Number(v ?? 0);
+    if (f.kind === "number") out[f.key] = toNum(v);
     else if (f.kind === "tags") out[f.key] = Array.isArray(v) ? v.join(", ") : (v ?? "");
     else if (f.kind === "datetime") out[f.key] = toLocalInput(v);
     else out[f.key] = v ?? "";
@@ -120,7 +120,7 @@ function formToPayload(form: Record<string, any>, fields: FieldDef[]) {
   const out: Record<string, any> = {};
   for (const f of fields) {
     const v = form[f.key];
-    if (f.kind === "number") out[f.key] = Number(v ?? 0);
+    if (f.kind === "number") out[f.key] = toNum(v);
     else if (f.kind === "tags")
       out[f.key] = String(v ?? "")
         .split(",")
@@ -133,8 +133,8 @@ function formToPayload(form: Record<string, any>, fields: FieldDef[]) {
 }
 
 function compareValues(a: unknown, b: unknown) {
-  const an = typeof a === "number" ? a : Number(a);
-  const bn = typeof b === "number" ? b : Number(b);
+  const an = toNum(a);
+  const bn = toNum(b);
   if (!Number.isNaN(an) && !Number.isNaN(bn) && a !== null && b !== null && a !== "" && b !== "")
     return an - bn;
   const as = String(a ?? "");
@@ -199,7 +199,7 @@ export function FieldEditor({
               value={String(value[f.key] ?? "")}
               placeholder={f.placeholder ?? (f.kind === "tags" ? "comma, separated" : "")}
               onChange={(e) =>
-                set(f.key, f.kind === "number" ? Number(e.target.value) : e.target.value)
+                set(f.key, f.kind === "number" ? toNum(e.target.value) : e.target.value)
               }
             />
           )}
